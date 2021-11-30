@@ -1,0 +1,14 @@
+{
+  "name": "comala_db",
+  "version": "0.1.0",
+  "description": "Un breve programa escrito en Javascript para usar fakerjs para poblar una base de datos para pruebas",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Marcos Mtz.",
+  "license": "ISC",
+  "dependencies": {
+    "faker": "^5.5.3"
+  }
+}
