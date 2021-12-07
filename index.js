@@ -1,26 +1,23 @@
 let faker = require('faker/locale/es_MX');
+let sqlite3 = require('sqlite3');
 faker.locale = "es_MX";
 
 //console.log(`${faker.name.firstName()} ${faker.name.middleName()} ${faker.name.lastName()} ${faker.name.lastName()}`);
-
-class Fecha {
-    constructor(dia = 1, mes = 1, año = 1970) {
-        this.date = new Date(año, mes, dia);
-    }
-}
 
 class PersonaAlAzar {
     constructor() {
         this.nombres = this.getNombres();
         this.apellidoMaterno = faker.name.lastName();
         this.apellidoPaterno = faker.name.lastName();
+        //formato actual para la fecha 1974-05-31T10:18:22.040Z
+        //formato para fecha_nacimiento YYYY-MM-DD
         this.fechaNacimiento = faker.date.past(60);
     }
     getNombres() {
         return faker.name.firstName();
     }
     getPersonaTexto() {
-        return `Nombre: ${this.nombres} ${this.apellidoMaterno} ${this.apellidoPaterno}\nFecha de nacimiento: ${this.fechaNacimiento}\n`;
+        return `Nombre: ${this.nombres} ${this.apellidoMaterno} ${this.apellidoPaterno}\nFecha de nacimiento: ${this.fechaNacimiento.toLocaleDateString()}\n`;
     }
 }
 /**
@@ -32,16 +29,20 @@ class PersonaAlAzar {
  * -Crear transacciones
  */
 
-//  Crear Base de Datos
-let db = new sqlite3.Database('./db/comala_sqlite.db', sqlite3.OPEN_READWRITE, (err) => {
+
+/** Crear Base de Datos
+ *  sqlite3.OPEN_READONLY   Modo lectura
+ *  sqlite3.OPEN_READWRITE  Modo lectura-escritura
+ *  sqlite3.OPEN_CREATE     Abrir la bd o crearla en caso de no existir
+ */
+let db = new sqlite3.Database('./db/comala_sqlite.db', sqlite3.OPEN_CREATE, (err) => {
     if (err) {
         console.error(err.message);
     }
     console.log('Connected to the chinook database.');
 });
 
-//  Crear Tablas
-/**
+/** Crear Tablas
 CREATE TABLE [IF NOT EXISTS] [schema_name].table_name (
 	column_1 data_type PRIMARY KEY,
    	column_2 data_type NOT NULL,
@@ -49,7 +50,7 @@ CREATE TABLE [IF NOT EXISTS] [schema_name].table_name (
 	table_constraints
 ) [WITHOUT ROWID];
  */
-//formato para fecha_nacimiento YYYY-MM-DD
+
 let sqlCrearTablaPersona = 
 `CREATE TABLE [IF NOT EXIST] persona
 (
@@ -64,15 +65,10 @@ let sqlCrearTablaPersona =
 ) [WITHOUT ROWID];
 `;
 
-let sqlCrearTabla
+
 
 //  Crear Relaciones
 
 //  Modificar tablas
 
 //  Crear Transacciones
-
-console.log( (new PersonaAlAzar()).getPersonaTexto() );
-console.log( (new PersonaAlAzar()).getPersonaTexto() );
-console.log( (new PersonaAlAzar()).getPersonaTexto() );
-console.log( (new PersonaAlAzar()).getPersonaTexto() );
